@@ -4,11 +4,17 @@ import java.util.ArrayList;
 
 public class UserManager {
 	private ArrayList<User> users;
-
-	public UserManager() {
+	private static UserManager instance = new UserManager();
+	
+	
+	private UserManager() {
 		users = new ArrayList<User>();
 	}
-
+	
+	public UserManager getInstance() {
+		return this.instance;
+	}
+	
 	// 유저 만들기
 	public void createUser() {
 		String id = ConsoleBoard.inputString("ID");
