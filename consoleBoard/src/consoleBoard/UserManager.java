@@ -65,4 +65,20 @@ public class UserManager {
 		info[1] = password;
 		return info;
 	}
+
+	// 유저 삭제
+	public String deleteUser() {
+		User user = users.get(ConsoleBoard.log);
+		String password = ConsoleBoard.inputString("PASSWORD");
+
+		if (!user.getPassword().equals(password)) {
+			System.err.println("PASSWORD 재확인");
+			return null;
+		}
+
+		users.remove(user);
+		ConsoleBoard.log = -1;
+		System.out.println("탈퇴 처리 완료.");
+		return user.getId();
+	}
 }
