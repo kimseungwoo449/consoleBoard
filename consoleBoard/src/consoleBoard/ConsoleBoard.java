@@ -5,6 +5,12 @@ import java.util.Scanner;
 public class ConsoleBoard {
 	public static Scanner sc = new Scanner(System.in);
 	
+	public static int log;
+	
+	public ConsoleBoard() {
+		this.log = -1;
+	}
+	
 	public static String inputString(String message) {
 		System.out.print(message +" : ");
 		return sc.next();
