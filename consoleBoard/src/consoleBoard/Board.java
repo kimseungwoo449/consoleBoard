@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class Board {
 	private final String EXIT = "*";
-	private Map<String[], String[]> board;
-
+	private Map<String[], String> board;
+	
 	private static Board instance = new Board();
 
 	private Board() {
-		board = new HashMap<String[], String[]>();
+		board = new HashMap<String[], String>();
 	}
 
 	public Board getInstance() {
@@ -30,15 +30,25 @@ public class Board {
 			detail+="\n";
 		}
 		
-		String[] idAndPassword = new String[2];
-		idAndPassword[0]= id;
-		idAndPassword[1] = password;
+		String[] idAndPasswordAndTitle = new String[3];
+		idAndPasswordAndTitle[0]= id;
+		idAndPasswordAndTitle[1] = password;
+		idAndPasswordAndTitle[2] = title;
 		
-		String[] titleAndDetail = new String[2];
-		titleAndDetail[0] = title;
-		titleAndDetail[1] = detail;
 		
-		board.put(idAndPassword, titleAndDetail);
+		board.put(idAndPasswordAndTitle, detail);
 		System.out.println("게시글 등록 완료.");
+	}
+	
+	// 읽기
+	public void viewContents(String title) {
+		
+	}
+	
+	private String[] findContentsByTitle(String title) {
+		String[] info = null;
+		
+		
+		return info;
 	}
 }
