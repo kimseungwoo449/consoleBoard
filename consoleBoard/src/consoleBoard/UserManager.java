@@ -54,4 +54,15 @@ public class UserManager {
 		ConsoleBoard.log = -1;
 		System.out.println("로그아웃 성공.");
 	}
+
+	public String[] getUserIdAndPassword() {
+		String[] info = new String[2];
+		User user = users.get(ConsoleBoard.log);
+		String id = user.getId();
+		String password = user.getPassword();
+
+		info[0] = id;
+		info[1] = password;
+		return info;
+	}
 }
