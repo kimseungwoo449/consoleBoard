@@ -1,24 +1,21 @@
 package consoleBoard;
 
-public class Board {
+public class Board extends ContentsFrame{
 	private String id;
 	private String password;
-	private String title;
-	private String detail;
 
 	public Board(String id, String password, String title, String detail) {
+		super(title,detail);
 		this.id = id;
 		this.password = password;
-		this.title = title;
-		this.detail = detail;
 	}
 
 	public String getTitle() {
-		return this.title;
+		return super.getTitle();
 	}
 	
 	public String getDetail() {
-		return this.detail;
+		return super.getDetail();
 	}
 
 	public String getId() {
@@ -27,5 +24,10 @@ public class Board {
 
 	public String getPassword() {
 		return this.password;
+	}
+	
+	@Override
+	public void setIsNotification() {
+		super.isNotification = false;
 	}
 }
