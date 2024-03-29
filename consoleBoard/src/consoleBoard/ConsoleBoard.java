@@ -8,11 +8,12 @@ public class ConsoleBoard {
 	private final int LOG_IN = 3;
 	private final int LOG_OUT = 4;
 	private final int BEFORE_PAGE = 5;
-	private final int AFTER_PAGE = 6;	
+	private final int AFTER_PAGE = 6;
 	private final int ADD_CONTENTS = 7;
 	private final int DELETE_CONTENTS = 8;
 	private final int MODIFY_CONTENTS = 9;
 	private final int VIEW_CONTENTS = 10;
+	private final int WRITE_NOTICE = 11;
 	private final int EXIT = 0;
 
 	public static Scanner sc = new Scanner(System.in);
@@ -62,6 +63,9 @@ public class ConsoleBoard {
 		System.out.println("[8] 글 삭제");
 		System.out.println("[9] 글 수정");
 		System.out.println("[10] 글 조회");
+		if (log == 0) {
+			System.out.println("[11] 공지 작성");
+		}
 		System.out.println("[0] 종	료");
 	}
 
@@ -77,23 +81,23 @@ public class ConsoleBoard {
 		return true;
 	}
 
-	private void runMenu(int choice) {
+	private void runMenu(int choice) {		// log==0 어드민일땐 글작성,가입,탈퇴,글 수정을 막는다.
 		if (!isPossible(choice))
 			return;
 
-		if (choice == JOIN)
+		if (choice == JOIN && log != 0)
 			userManager.createUser();
-		else if (choice == LEAVE)
+		else if (choice == LEAVE && log != 0)
 			userManager.deleteUser();
 		else if (choice == LOG_IN)
 			userManager.login();
 		else if (choice == LOG_OUT)
 			userManager.logout();
-		else if(choice==BEFORE_PAGE)
+		else if (choice == BEFORE_PAGE)
 			boardManager.beforePage();
-		else if(choice==AFTER_PAGE)
+		else if (choice == AFTER_PAGE)
 			boardManager.afterPage();
-		else if (choice == ADD_CONTENTS) {
+		else if (choice == ADD_CONTENTS && log != 0) {
 			String[] idAndPassword = userManager.getUserIdAndPassword();
 			String id = idAndPassword[0];
 			String password = idAndPassword[1];
@@ -103,13 +107,15 @@ public class ConsoleBoard {
 			String id = idAndPassword[0];
 			String password = idAndPassword[1];
 			boardManager.deleteContents(id, password);
-		} else if (choice == MODIFY_CONTENTS) {
+		} else if (choice == MODIFY_CONTENTS && log != 0) {
 			String[] idAndPassword = userManager.getUserIdAndPassword();
 			String id = idAndPassword[0];
 			String password = idAndPassword[1];
 			boardManager.updateContents(id, password);
 		} else if (choice == VIEW_CONTENTS) {
 			boardManager.viewContents();
+		} else if (choice == WRITE_NOTICE && log == 0) {
+			boardManager.createNotification();
 		} else if (choice == EXIT)
 			isRun = false;
 	}
