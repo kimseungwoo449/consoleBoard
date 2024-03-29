@@ -104,9 +104,23 @@ public class BoardManager {
 	// 삭제
 	public void deleteContents(String id, String password) {
 		int number = ConsoleBoard.inputNumber("삭제하려는 글 번호");
-
+		
 		if (number < 1)
 			return;
-
+		Board contents = findContentsByKey(number);
+		if(contents==null) {
+			System.err.println("찾으시는 글번호가 존재하지 않습니다.");
+			return;
+		}
+		String targetId = contents.getId();
+		String targetPassword = contents.getPassword();
+		
+		if(!(targetId.equals(id)&&targetPassword.equals(password))) {
+			System.err.println("ID 혹은 PASSWORD가 달라 삭제권한이 없습니다.");
+			return;
+		}
+		
+		board.remove(number);
+		System.out.println("게시글 삭제 완료.");
 	}
 }
