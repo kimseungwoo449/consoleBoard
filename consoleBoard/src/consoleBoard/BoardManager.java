@@ -19,28 +19,30 @@ public class BoardManager {
 	private int startRow;
 	private int endRow;
 	private int pageCount;
-	
+
 	private Load boardLoad = Load.getInstance();
 	private Save boardSave = Save.getInstance();
 	private ArrayList<Notification> notifications;
 	private Map<Integer, Board> board; // 키값 글번호, value값 board
 	private int contentsNumber;
 	private static BoardManager instance = new BoardManager();
-	
+
 	private BoardManager() {
 		board = boardLoad.loadBoardData();
-		if(board==null) {
+		if (board == null) {
 			board = new HashMap<>();
 			this.contentsNumber = 1;
 			this.pageCount = 0;
-		}else {
-			this.contentsNumber = board.size()+1;
+		} else {
+			this.contentsNumber = board.size() + 1;
 			calculatePageCount();
 		}
-		notifications = new ArrayList<Notification>();
+		notifications = boardLoad.loadNoticeData();
+		if (notifications == null)
+			notifications = new ArrayList<Notification>();
 		this.curPageNumber = 1;
 		this.startRow = 1;
-		this.endRow = 5;			
+		this.endRow = 5;
 	}
 
 	public static BoardManager getInstance() {
@@ -52,8 +54,8 @@ public class BoardManager {
 		String[] contents = createNewContents();
 		String title = contents[TITLE];
 		String detail = contents[DETAIL];
-		Board newContents = new Board(id, password, title,detail);
-		
+		Board newContents = new Board(id, password, title, detail);
+
 		pushOldContents();
 		board.put(RECENT, newContents);
 		calculatePageCount();
@@ -80,8 +82,8 @@ public class BoardManager {
 			detail += info;
 			detail += "\n";
 		}
-		if(detail.length()>0)
-			detail = detail.substring(0,detail.length()-1);
+		if (detail.length() > 0)
+			detail = detail.substring(0, detail.length() - 1);
 		String info[] = new String[2];
 		info[TITLE] = title;
 		info[DETAIL] = detail;
@@ -202,7 +204,7 @@ public class BoardManager {
 			System.err.println("찾으시는 글번호가 존재하지 않습니다.");
 			return false;
 		}
-		if (ConsoleBoard.log == 0)	//어드민은 삭제권한을 지님
+		if (ConsoleBoard.log == 0) // 어드민은 삭제권한을 지님
 			return true;
 
 		String targetId = contents.getId();
@@ -220,12 +222,12 @@ public class BoardManager {
 
 		if (!isPossible(id, password, number))
 			return;
-		
+
 		String[] contents = createNewContents();
 		String title = contents[TITLE];
 		String detail = contents[DETAIL];
-		Board newContents = new Board(id, password, title,detail);
-		
+		Board newContents = new Board(id, password, title, detail);
+
 		board.put(number, newContents);
 		System.out.println("게시글 수정 완료.");
 		boardSave.saveBoardFile(board);
@@ -266,12 +268,12 @@ public class BoardManager {
 		notifications.add(notification);
 		boardSave.saveNoticeFile(notifications);
 	}
-	
-	public void modifyBoardsPassword(String id,String newPassword) {
-		for(int i =1;i<=board.size();i++) {
+
+	public void modifyBoardsPassword(String id, String newPassword) {
+		for (int i = 1; i <= board.size(); i++) {
 			Board board = this.board.get(i);
-			
-			if(board.getId().equals(id)) {
+
+			if (board.getId().equals(id)) {
 				board.setPassword(newPassword);
 			}
 		}
