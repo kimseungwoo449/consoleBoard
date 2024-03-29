@@ -7,12 +7,21 @@ public class ConsoleBoard {
 	
 	public static int log;
 	
+	private UserManager userManager;
+	private BoardManager boardManager;
+	
 	public ConsoleBoard() {
 		this.log = -1;
+		boardManager = BoardManager.getInstance();
+		userManager = UserManager.getInstance();
 	}
 	
 	public static String inputString(String message) {
 		System.out.print(message +" : ");
+		return sc.next();
+	}
+	
+	public static String inputString() {
 		return sc.next();
 	}
 	
