@@ -110,28 +110,40 @@ public class BoardManager {
 	public void deleteContents(String id, String password) {
 		int number = ConsoleBoard.inputNumber("삭제하려는 글 번호");
 
-		if (number < 1)
+		if(!isPossible(id,password,number))
 			return;
-		Board contents = findContentsByKey(number);
-		if (contents == null) {
-			System.err.println("찾으시는 글번호가 존재하지 않습니다.");
-			return;
-		}
-		String targetId = contents.getId();
-		String targetPassword = contents.getPassword();
-
-		if (!(targetId.equals(id) && targetPassword.equals(password))) {
-			System.err.println("ID 혹은 PASSWORD가 달라 삭제권한이 없습니다.");
-			return;
-		}
 
 		board.remove(number);
 		System.out.println("게시글 삭제 완료.");
 	}
 
-	// 게시글 업데이트
-	public void updateContents(String id, String password) {
+	private boolean isPossible(String id, String password, int number) {
+		if (number < 1)
+			return false;
+		Board contents = findContentsByKey(number);
+		if (contents == null) {
+			System.err.println("찾으시는 글번호가 존재하지 않습니다.");
+			return false;
+		}
+		String targetId = contents.getId();
+		String targetPassword = contents.getPassword();
+		if (!(targetId.equals(id) && targetPassword.equals(password))) {
+			System.err.println("ID 혹은 PASSWORD가 달라 권한이 없습니다.");
+			return false;
+		}
+		return true;
+	}
 
+	// 게시글 수정
+	public void updateContents(String id, String password) {
+		int number = ConsoleBoard.inputNumber("수정하려는 글 번호");
+
+		if(!isPossible(id,password,number))
+			return;
+
+		Board newContents = createNewContents(id, password);
+		board.put(number, newContents);
+		System.out.println("게시글 수정 완료.");
 	}
 
 }
