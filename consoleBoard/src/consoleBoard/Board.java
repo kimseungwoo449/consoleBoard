@@ -18,7 +18,7 @@ public class Board {
 	}
 
 	// 게시글 작성
-	public void writing(String id,String password) {
+	public void writing(String number,String id,String password) {
 		String title = ConsoleBoard.inputString("제목");
 		String detail = "";
 		System.out.println("내용 (*입력시 종료): ");
@@ -30,13 +30,14 @@ public class Board {
 			detail+="\n";
 		}
 		
-		String[] idAndPasswordAndTitle = new String[3];
-		idAndPasswordAndTitle[0]= id;
-		idAndPasswordAndTitle[1] = password;
-		idAndPasswordAndTitle[2] = title;
+		String[] keyValues = new String[4];
+		keyValues[0] = number;
+		keyValues[1]= id;
+		keyValues[2] = password;
+		keyValues[3] = title;
 		
 		
-		board.put(idAndPasswordAndTitle, detail);
+		board.put(keyValues, detail);
 		System.out.println("게시글 등록 완료.");
 	}
 	
