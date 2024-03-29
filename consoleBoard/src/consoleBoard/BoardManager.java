@@ -62,19 +62,28 @@ public class BoardManager {
 		System.out.println(contents);
 	}
 
+	private Board findContentsByKey(int number) {
+		Board temp = null;
+		for (Integer key : board.keySet()) {
+			if (key == number) {
+				temp = board.get(key);
+			}
+		}
+		return temp;
+	}
+
 	private String createStringInfo(int number) {
 		String info = null;
 
-		for (Integer key : board.keySet()) {
-			if (key == number) {
-				Board contents = board.get(key);
+		Board contents = findContentsByKey(number);
 
-				String title = contents.getTitle();
-				String detail = contents.getDetail();
-				info = String.format("제목 : %s\n내용 : %s", title, detail);
-				return info;
-			}
-		}
+		if (contents == null)
+			return info;
+
+		String title = contents.getTitle();
+		String detail = contents.getDetail();
+		info = String.format("제목 : %s\n내용 : %s", title, detail);
+
 		return info;
 	}
 
@@ -90,5 +99,14 @@ public class BoardManager {
 			String info = String.format("%d. %s [작성자 : %s]", key, title, id);
 			System.out.println(info);
 		}
+	}
+
+	// 삭제
+	public void deleteContents(String id, String password) {
+		int number = ConsoleBoard.inputNumber("삭제하려는 글 번호");
+
+		if (number < 1)
+			return;
+
 	}
 }
