@@ -9,7 +9,6 @@ import java.util.Map;
 public class BoardManager {
 	private final String EXIT = "*";
 
-	private final int CONTENTS_NUMBER = 0;
 	private final int ID = 1;
 	private final int PASSWORD = 2;
 	private final int TITLE = 3;
@@ -17,9 +16,9 @@ public class BoardManager {
 
 	private final int VIEW_CONTENTS_NUMBER = 5;
 
-	public static int curPageNumber;
-	public static int startRow;
-	public static int endRow;
+	private int curPageNumber;
+	private int startRow;
+	private int endRow;
 	private int pageCount;
 
 	private Map<Integer, Board> board; // 키값 글번호, value값 board
@@ -45,9 +44,10 @@ public class BoardManager {
 
 		pushOldContents();
 		board.put(RECENT, contents);
+		calculatePageCount();
 		System.out.println("게시글 등록 완료.");
 	}
-	
+
 	private void pushOldContents() {
 		board.put(contentsNumber++, null);
 		for (int i = board.size(); i >= 1; i--) {
@@ -70,6 +70,13 @@ public class BoardManager {
 
 		Board contents = new Board(id, password, title, detail);
 		return contents;
+	}
+
+	private void calculatePageCount() {
+		if (board.size() % this.VIEW_CONTENTS_NUMBER != 0) {
+			this.pageCount = board.size() / this.VIEW_CONTENTS_NUMBER + 1;
+		} else
+			this.pageCount = board.size() / this.VIEW_CONTENTS_NUMBER;
 	}
 
 	// 읽기
@@ -123,10 +130,12 @@ public class BoardManager {
 		for (int i = startRow; i <= endRow; i++) {
 			int key = i;
 			Board contents = board.get(key);
-			String title = contents.getTitle();
-			String id = contents.getId();
-			String info = String.format("%d. %s [작성자 : %s]", key, title, id);
-			System.out.println(info);
+			if (contents != null) {
+				String title = contents.getTitle();
+				String id = contents.getId();
+				String info = String.format("%d. %s [작성자 : %s]", key, title, id);
+				System.out.println(info);
+			}
 		}
 		String data = String.format("[%d/%dpage](%d)", curPageNumber, pageCount, board.size());
 		System.out.println(data);
@@ -141,7 +150,7 @@ public class BoardManager {
 			return;
 		refineBoard(number);
 		this.contentsNumber = this.board.size() + 1;
-
+		calculatePageCount();
 		System.out.println("게시글 삭제 완료.");
 	}
 
@@ -187,6 +196,32 @@ public class BoardManager {
 		Board newContents = createNewContents(id, password);
 		board.put(number, newContents);
 		System.out.println("게시글 수정 완료.");
+	}
+
+	// 이전
+	public void beforePage() {
+		if (curPageNumber - 1 < 1) {
+			System.err.println("이전 페이지를 찾을 수 없습니다.");
+			return;
+		}
+
+		curPageNumber--;
+		calculateStartRowAndEndRow();
+	}
+
+	private void calculateStartRowAndEndRow() {
+		this.startRow = this.curPageNumber * this.VIEW_CONTENTS_NUMBER - 4;
+		this.endRow = this.startRow + 4;
+	}
+	
+	// 이후
+	public void afterPage() {
+		if(curPageNumber+1>pageCount) {
+			System.err.println("이후 페이지를 찾을 수 없습니다.");
+			return;
+		}
+		curPageNumber++;
+		calculateStartRowAndEndRow();
 	}
 
 }
