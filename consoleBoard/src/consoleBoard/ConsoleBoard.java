@@ -7,10 +7,12 @@ public class ConsoleBoard {
 	private final int LEAVE = 2;
 	private final int LOG_IN = 3;
 	private final int LOG_OUT = 4;
-	private final int ADD_CONTENTS = 5;
-	private final int DELETE_CONTENTS = 6;
-	private final int MODIFY_CONTENTS = 7;
-	private final int VIEW_CONTENTS = 8;
+	private final int BEFORE_PAGE = 5;
+	private final int AFTER_PAGE = 6;	
+	private final int ADD_CONTENTS = 7;
+	private final int DELETE_CONTENTS = 8;
+	private final int MODIFY_CONTENTS = 9;
+	private final int VIEW_CONTENTS = 10;
 	private final int EXIT = 0;
 
 	public static Scanner sc = new Scanner(System.in);
@@ -54,10 +56,12 @@ public class ConsoleBoard {
 		System.out.println("[2] 회원탈퇴");
 		System.out.println("[3] 로그	인");
 		System.out.println("[4] 로그아웃");
-		System.out.println("[5] 글 작성");
-		System.out.println("[6] 글 삭제");
-		System.out.println("[7] 글 수정");
-		System.out.println("[8] 글 조회");
+		System.out.println("[5] 이전");
+		System.out.println("[6] 이후");
+		System.out.println("[7] 글 작성");
+		System.out.println("[8] 글 삭제");
+		System.out.println("[9] 글 수정");
+		System.out.println("[10] 글 조회");
 		System.out.println("[0] 종	료");
 	}
 
@@ -85,6 +89,10 @@ public class ConsoleBoard {
 			userManager.login();
 		else if (choice == LOG_OUT)
 			userManager.logout();
+		else if(choice==BEFORE_PAGE)
+			boardManager.beforePage();
+		else if(choice==AFTER_PAGE)
+			boardManager.afterPage();
 		else if (choice == ADD_CONTENTS) {
 			String[] idAndPassword = userManager.getUserIdAndPassword();
 			String id = idAndPassword[0];
