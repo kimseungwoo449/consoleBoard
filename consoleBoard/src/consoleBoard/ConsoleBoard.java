@@ -16,7 +16,11 @@ public class ConsoleBoard {
 	private final int VIEW_CONTENTS = 11;
 	private final int WRITE_NOTICE = 12;
 	private final int EXIT = 0;
-
+	
+	public final static String USER_FILE_NAME = "users.txt";
+	public final static String BOARD_FILE_NAME = "boards.txt";
+	public final static String NOTICE_FILE_NAME = "notices.txt";
+	
 	public static Scanner sc = new Scanner(System.in);
 
 	public static int log;
