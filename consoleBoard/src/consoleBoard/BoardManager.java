@@ -41,10 +41,13 @@ public class BoardManager {
 
 	// 게시글 작성
 	public void writing(String id, String password) {
-		Board contents = createNewContents(id, password);
-
+		String[] contents = createNewContents();
+		String title = contents[TITLE];
+		String detail = contents[DETAIL];
+		Board newContents = new Board(id, password, title,detail);
+		
 		pushOldContents();
-		board.put(RECENT, contents);
+		board.put(RECENT, newContents);
 		calculatePageCount();
 		System.out.println("게시글 등록 완료.");
 	}
@@ -55,24 +58,6 @@ public class BoardManager {
 			Board oldBoard = board.get(i - 1);
 			board.replace(i, oldBoard);
 		}
-	}
-
-	private Board createNewContents(String id, String password) {
-		String title = ConsoleBoard.inputString("제목");
-		String detail = "";
-		System.out.println("내용 (*입력시 종료): ");
-		while (true) {
-			String info = ConsoleBoard.inputString();
-			if (info.equals(EXIT))
-				break;
-			detail += info;
-			detail += "\n";
-		}
-		if(detail.length()>0)
-			detail = detail.substring(0,detail.length()-1);
-
-		Board contents = new Board(id, password, title, detail);
-		return contents;
 	}
 
 	private String[] createNewContents() {
@@ -226,8 +211,12 @@ public class BoardManager {
 
 		if (!isPossible(id, password, number))
 			return;
-
-		Board newContents = createNewContents(id, password);
+		
+		String[] contents = createNewContents();
+		String title = contents[TITLE];
+		String detail = contents[DETAIL];
+		Board newContents = new Board(id, password, title,detail);
+		
 		board.put(number, newContents);
 		System.out.println("게시글 수정 완료.");
 	}
