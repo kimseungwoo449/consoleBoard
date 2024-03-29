@@ -25,7 +25,7 @@ public class Load {
 	public ArrayList<User> loadUserData() {
 		ArrayList<User> users = null;
 		String data = loadFile(userFile);
-		if (data == null)
+		if (data == null || data.length() == 0)
 			return users;
 		String info[] = data.split("\n");
 
@@ -71,7 +71,7 @@ public class Load {
 	public Map<Integer, Board> loadBoardData() {
 		Map<Integer, Board> board = null;
 		String data = loadFile(boardFile);
-		if (data == null)
+		if (data == null || data.length() == 0)
 			return board;
 		String[] info = data.split("\\/");
 
@@ -94,7 +94,7 @@ public class Load {
 	public ArrayList<Notification> loadNoticeData() {
 		ArrayList<Notification> notices = null;
 		String data = loadFile(noticeFile);
-		if (data == null)
+		if (data == null || data.length() == 0)
 			return notices;
 		String[] info = data.split("\\/");
 
