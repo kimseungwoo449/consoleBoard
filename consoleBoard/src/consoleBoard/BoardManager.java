@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 public class BoardManager {
-private final String EXIT = "*";
-	
+	private final String EXIT = "*";
+
 	private final int CONTENTS_NUMBER = 0;
 	private final int ID = 1;
 	private final int PASSWORD = 2;
 	private final int TITLE = 3;
-	
-	
+
 	private Map<Integer, Board> board; // 키값 글번호, value값 board
 	private int contentsNumber;
 	private static BoardManager instance = new BoardManager();
@@ -29,59 +28,67 @@ private final String EXIT = "*";
 	}
 
 	// 게시글 작성
-	public void writing(String id,String password) {
+	public void writing(String id, String password) {
 		String title = ConsoleBoard.inputString("제목");
 		String detail = "";
 		System.out.println("내용 (*입력시 종료): ");
 		while (true) {
 			String info = ConsoleBoard.inputString();
-			if(info.equals(EXIT))
+			if (info.equals(EXIT))
 				break;
 			detail += info;
-			detail+="\n";
+			detail += "\n";
 		}
-		
+
 		Board contents = new Board(id, password, title, detail);
 
 		board.put(contentsNumber++, contents);
 		System.out.println("게시글 등록 완료.");
 	}
-	
+
 	// 읽기
 	public void viewContents() {
 		int number = ConsoleBoard.inputNumber("조회하려는 글 번호");
-		
-		if(number<1)
+
+		if (number < 1)
 			return;
-		
+
 		String contents = createStringInfo(number);
-		if(contents==null) {
+		if (contents == null) {
 			System.err.println("찾으시는 글번호는 존재하지 않습니다.");
 			return;
 		}
-		
+
 		System.out.println(contents);
 	}
-	
+
 	private String createStringInfo(int number) {
 		String info = null;
-		
-		for(Integer key:board.keySet()) {
-			if(key==number) {
+
+		for (Integer key : board.keySet()) {
+			if (key == number) {
 				Board contents = board.get(key);
-	
+
 				String title = contents.getTitle();
 				String detail = contents.getDetail();
-				info = String.format("제목 : %s\n내용 : %s",title,detail );
+				info = String.format("제목 : %s\n내용 : %s", title, detail);
 				return info;
 			}
 		}
 		return info;
 	}
-	
+
 	public void viewAllTitle() {
 		List keySet = new ArrayList(board.keySet());
+
 		Collections.sort(keySet);
-		
+
+		for (Object key : keySet) {
+			Board contents = board.get(key);
+			String title = contents.getTitle();
+			String id = contents.getId();
+			String info = String.format("%d. %s [작성자 : %s]", key, title, id);
+			System.out.println(info);
+		}
 	}
 }
