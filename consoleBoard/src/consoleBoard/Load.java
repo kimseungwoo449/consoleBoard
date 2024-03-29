@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Load {
 	private static Load instance = new Load();
@@ -21,11 +23,6 @@ public class Load {
 	}
 
 	public ArrayList<User> loadUserData() {
-		ArrayList<User> users = makeUsers(userFile);
-		return users;
-	}
-
-	private ArrayList<User> makeUsers(File userFile) {
 		ArrayList<User> users = null;
 		String data = loadFile(userFile);
 		String info[] = data.split("\n");
@@ -67,6 +64,27 @@ public class Load {
 			}
 		}
 		return data;
+	}
+	
+	public Map<Integer, Board> loadBoardData(){
+		Map<Integer, Board> board = null;
+		String data = loadFile(boardFile);
+		String[] info = data.split("\\/");
+		
+		if(info[0]!=null) {
+			board = new HashMap<Integer, Board>();
+			for(int i =0;i<info.length;i++) {
+				String[] boardData = info[i].split(",");
+				int numberOfContents = Integer.parseInt(boardData[0]);
+				String id = boardData[1];
+				String password = boardData[2];
+				String title = boardData[3];
+				String detail = boardData[4];
+				Board targetBoard = new Board(id, password, title, detail);
+				board.put(numberOfContents, targetBoard);
+			}
+		}
+		return board;
 	}
 	
 	public static Load getInstance() {

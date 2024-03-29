@@ -20,20 +20,27 @@ public class BoardManager {
 	private int endRow;
 	private int pageCount;
 	
+	private Load boardLoad = Load.getInstance();
 	private Save boardSave = Save.getInstance();
 	private ArrayList<Notification> notifications;
 	private Map<Integer, Board> board; // 키값 글번호, value값 board
 	private int contentsNumber;
 	private static BoardManager instance = new BoardManager();
-
+	
 	private BoardManager() {
-		board = new HashMap<>();
+		board = boardLoad.loadBoardData();
+		if(board==null) {
+			board = new HashMap<>();
+			this.contentsNumber = 1;
+			this.pageCount = 0;
+		}else {
+			this.contentsNumber = board.size()+1;
+			calculatePageCount();
+		}
 		notifications = new ArrayList<Notification>();
-		this.contentsNumber = 1;
 		this.curPageNumber = 1;
-		this.pageCount = 0;
 		this.startRow = 1;
-		this.endRow = 5;
+		this.endRow = 5;			
 	}
 
 	public static BoardManager getInstance() {
