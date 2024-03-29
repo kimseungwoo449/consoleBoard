@@ -46,7 +46,8 @@ public class BoardManager {
 			detail += info;
 			detail += "\n";
 		}
-
+		
+		
 		Board contents = new Board(id, password, title, detail);
 		return contents;
 	}
@@ -63,7 +64,7 @@ public class BoardManager {
 			System.err.println("찾으시는 글번호는 존재하지 않습니다.");
 			return;
 		}
-
+		
 		System.out.println(contents);
 	}
 
@@ -87,8 +88,9 @@ public class BoardManager {
 
 		String title = contents.getTitle();
 		String detail = contents.getDetail();
+		System.out.println(detail);
 		info = String.format("제목 : %s\n내용 : %s", title, detail);
-
+			
 		return info;
 	}
 
@@ -112,11 +114,27 @@ public class BoardManager {
 
 		if(!isPossible(id,password,number))
 			return;
+		refineBoard(number);
+		this.contentsNumber = this.board.size()+1;
 
-		board.remove(number);
 		System.out.println("게시글 삭제 완료.");
 	}
-
+	
+	private void refineBoard(int number) {
+		Map<Integer, Board> temp = this.board;
+		board = new HashMap<Integer, Board>();
+		
+		for(int i =1;i<=temp.size();i++) {
+			if(i<number) {
+				Board board = temp.get(i);
+				this.board.put(i, board);
+			}else if(i>number) {
+				Board board = temp.get(i);
+				this.board.put(i-1, board);
+			}
+		}
+	}
+	
 	private boolean isPossible(String id, String password, int number) {
 		if (number < 1)
 			return false;
