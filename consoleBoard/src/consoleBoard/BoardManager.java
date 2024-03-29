@@ -29,6 +29,13 @@ public class BoardManager {
 
 	// 게시글 작성
 	public void writing(String id, String password) {
+		Board contents = createNewContents(id, password);
+
+		board.put(contentsNumber++, contents);
+		System.out.println("게시글 등록 완료.");
+	}
+
+	private Board createNewContents(String id, String password) {
 		String title = ConsoleBoard.inputString("제목");
 		String detail = "";
 		System.out.println("내용 (*입력시 종료): ");
@@ -41,9 +48,7 @@ public class BoardManager {
 		}
 
 		Board contents = new Board(id, password, title, detail);
-
-		board.put(contentsNumber++, contents);
-		System.out.println("게시글 등록 완료.");
+		return contents;
 	}
 
 	// 읽기
@@ -104,23 +109,29 @@ public class BoardManager {
 	// 삭제
 	public void deleteContents(String id, String password) {
 		int number = ConsoleBoard.inputNumber("삭제하려는 글 번호");
-		
+
 		if (number < 1)
 			return;
 		Board contents = findContentsByKey(number);
-		if(contents==null) {
+		if (contents == null) {
 			System.err.println("찾으시는 글번호가 존재하지 않습니다.");
 			return;
 		}
 		String targetId = contents.getId();
 		String targetPassword = contents.getPassword();
-		
-		if(!(targetId.equals(id)&&targetPassword.equals(password))) {
+
+		if (!(targetId.equals(id) && targetPassword.equals(password))) {
 			System.err.println("ID 혹은 PASSWORD가 달라 삭제권한이 없습니다.");
 			return;
 		}
-		
+
 		board.remove(number);
 		System.out.println("게시글 삭제 완료.");
 	}
+
+	// 게시글 업데이트
+	public void updateContents(String id, String password) {
+
+	}
+
 }
