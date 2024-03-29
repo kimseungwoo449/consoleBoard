@@ -16,9 +16,9 @@ public class Board {
 	public String getTitle() {
 		return this.title;
 	}
-
+	
 	public String getDetail() {
-		return this.title;
+		return this.detail;
 	}
 
 	public String getId() {
