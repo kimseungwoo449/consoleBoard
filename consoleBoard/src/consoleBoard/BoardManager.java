@@ -47,31 +47,37 @@ private final String EXIT = "*";
 		System.out.println("게시글 등록 완료.");
 	}
 	
-//	// 읽기
-//	public void viewContents() {
-//		String number = ConsoleBoard.inputString("조회하려는 글 번호");
-//		
-//		String contents = createStringInfo(number);
-//		if(contents==null) {
-//			System.err.println("찾으시는 글번호는 존재하지 않습니다.");
-//			return;
-//		}
-//	}
-//	
-//	private String createStringInfo(String number) {
-//		String info = null;
-//		
-//		for(String[] key:board.keySet()) {
-//			String keyNumber = key[CONTENTS_NUMBER];
-//			if(number.equals(keyNumber)) {
-//				String title = key[TITLE];
-//				String detail = board.get(key);
-//				info = String.format("제목 : %s\n내용 : %s",title,detail );
-//				return info;
-//			}
-//		}
-//		return info;
-//	}
+	// 읽기
+	public void viewContents() {
+		int number = ConsoleBoard.inputNumber("조회하려는 글 번호");
+		
+		if(number<1)
+			return;
+		
+		String contents = createStringInfo(number);
+		if(contents==null) {
+			System.err.println("찾으시는 글번호는 존재하지 않습니다.");
+			return;
+		}
+		
+		System.out.println(contents);
+	}
+	
+	private String createStringInfo(int number) {
+		String info = null;
+		
+		for(Integer key:board.keySet()) {
+			if(key==number) {
+				Board contents = board.get(key);
+	
+				String title = contents.getTitle();
+				String detail = contents.getDetail();
+				info = String.format("제목 : %s\n내용 : %s",title,detail );
+				return info;
+			}
+		}
+		return info;
+	}
 	
 	public void viewAllTitle() {
 		List keySet = new ArrayList(board.keySet());
