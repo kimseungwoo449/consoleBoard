@@ -9,9 +9,8 @@ import java.util.Map;
 public class BoardManager {
 	private final String EXIT = "*";
 
-	private final int ID = 1;
-	private final int PASSWORD = 2;
-	private final int TITLE = 3;
+	private final int TITLE = 0;
+	private final int DETAIL = 1;
 	private final int RECENT = 1;
 
 	private final int VIEW_CONTENTS_NUMBER = 5;
@@ -21,12 +20,14 @@ public class BoardManager {
 	private int endRow;
 	private int pageCount;
 
+	private ArrayList<Notification> notifications;
 	private Map<Integer, Board> board; // 키값 글번호, value값 board
 	private int contentsNumber;
 	private static BoardManager instance = new BoardManager();
 
 	private BoardManager() {
 		board = new HashMap<>();
+		notifications = new ArrayList<Notification>();
 		this.contentsNumber = 1;
 		this.curPageNumber = 1;
 		this.pageCount = 0;
@@ -67,9 +68,30 @@ public class BoardManager {
 			detail += info;
 			detail += "\n";
 		}
+		if(detail.length()>0)
+			detail = detail.substring(0,detail.length()-1);
 
 		Board contents = new Board(id, password, title, detail);
 		return contents;
+	}
+
+	private String[] createNewContents() {
+		String title = ConsoleBoard.inputString("제목");
+		String detail = "";
+		System.out.println("내용 (*입력시 종료): ");
+		while (true) {
+			String info = ConsoleBoard.inputString();
+			if (info.equals(EXIT))
+				break;
+			detail += info;
+			detail += "\n";
+		}
+		if(detail.length()>0)
+			detail = detail.substring(0,detail.length()-1);
+		String info[] = new String[2];
+		info[TITLE] = title;
+		info[DETAIL] = detail;
+		return info;
 	}
 
 	private void calculatePageCount() {
@@ -125,6 +147,15 @@ public class BoardManager {
 		List keySet = new ArrayList(board.keySet());
 
 		Collections.sort(keySet);
+		if (notifications.size() > 0) {
+			System.out.println("-----------------");
+			System.out.println("[공지]");
+			for (Notification notification : notifications) {
+				String notice = String.format("제목 : %s\n내용 : %s", notification.getTitle(), notification.getDetail());
+				System.err.println(notice);
+			}
+			System.out.println("-----------------");
+		}
 		System.out.println("-----------------");
 		System.out.println("[게시판]");
 		for (int i = startRow; i <= endRow; i++) {
@@ -177,6 +208,9 @@ public class BoardManager {
 			System.err.println("찾으시는 글번호가 존재하지 않습니다.");
 			return false;
 		}
+		if (ConsoleBoard.log == 0)	//어드민은 삭제권한을 지님
+			return true;
+
 		String targetId = contents.getId();
 		String targetPassword = contents.getPassword();
 		if (!(targetId.equals(id) && targetPassword.equals(password))) {
@@ -213,15 +247,24 @@ public class BoardManager {
 		this.startRow = this.curPageNumber * this.VIEW_CONTENTS_NUMBER - 4;
 		this.endRow = this.startRow + 4;
 	}
-	
+
 	// 이후
 	public void afterPage() {
-		if(curPageNumber+1>pageCount) {
+		if (curPageNumber + 1 > pageCount) {
 			System.err.println("이후 페이지를 찾을 수 없습니다.");
 			return;
 		}
 		curPageNumber++;
 		calculateStartRowAndEndRow();
+	}
+
+	public void createNotification() {
+		String[] data = createNewContents();
+		String title = data[TITLE];
+		String detail = data[DETAIL];
+
+		Notification notification = new Notification(title, detail);
+		notifications.add(notification);
 	}
 
 }
