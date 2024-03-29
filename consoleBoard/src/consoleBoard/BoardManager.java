@@ -23,7 +23,7 @@ public class BoardManager {
 		this.contentsNumber = 1;
 	}
 
-	public BoardManager getInstance() {
+	public static BoardManager getInstance() {
 		return instance;
 	}
 

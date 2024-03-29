@@ -11,8 +11,8 @@ public class UserManager {
 		users = new ArrayList<User>();
 	}
 	
-	public UserManager getInstance() {
-		return this.instance;
+	public static UserManager getInstance() {
+		return instance;
 	}
 	
 	// 유저 만들기
