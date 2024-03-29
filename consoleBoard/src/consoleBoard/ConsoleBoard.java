@@ -59,7 +59,22 @@ public class ConsoleBoard {
 		System.out.println("[0] 종	료");
 	}
 
+	private boolean isPossible(int choice) {
+		if (log != -1 && (choice == JOIN || choice == LOG_IN)) {
+			System.err.println("로그 아웃 후 이용가능합니다.");
+			return false;
+		} else if (log == -1 && (choice == LEAVE || choice == LOG_OUT || choice == ADD_CONTENTS
+				|| choice == DELETE_CONTENTS || choice == MODIFY_CONTENTS)) {
+			System.err.println("로그 인 후 이용가능합니다.");
+			return false;
+		}
+		return true;
+	}
+
 	private void runMenu(int choice) {
+		if (!isPossible(choice))
+			return;
+
 		if (choice == JOIN)
 			userManager.createUser();
 		else if (choice == LEAVE)
@@ -92,6 +107,7 @@ public class ConsoleBoard {
 			boardManager.viewAllTitle();
 			printMenu();
 			int choice = inputNumber("Menu");
+			runMenu(choice);
 		}
 	}
 }
