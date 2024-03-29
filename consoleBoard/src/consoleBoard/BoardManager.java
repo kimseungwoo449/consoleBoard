@@ -13,7 +13,14 @@ public class BoardManager {
 	private final int ID = 1;
 	private final int PASSWORD = 2;
 	private final int TITLE = 3;
-
+	private final int RECENT = 1;
+	
+	private int curPageNumber;
+	private int pageSize;
+	private int pageCount;
+	private int startRow;
+	private int endRow;
+	
 	private Map<Integer, Board> board; // 키값 글번호, value값 board
 	private int contentsNumber;
 	private static BoardManager instance = new BoardManager();
@@ -30,11 +37,20 @@ public class BoardManager {
 	// 게시글 작성
 	public void writing(String id, String password) {
 		Board contents = createNewContents(id, password);
-
-		board.put(contentsNumber++, contents);
+		
+		pushOldContents();
+		board.put(RECENT, contents);
 		System.out.println("게시글 등록 완료.");
 	}
 
+	private void pushOldContents() {
+		board.put(contentsNumber++, null);
+		for(int i =board.size();i>=1;i--) {
+			Board oldBoard = board.get(i-1);
+			board.replace(i,oldBoard);
+		}
+	}
+	
 	private Board createNewContents(String id, String password) {
 		String title = ConsoleBoard.inputString("제목");
 		String detail = "";
