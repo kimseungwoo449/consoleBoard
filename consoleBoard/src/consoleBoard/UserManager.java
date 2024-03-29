@@ -6,11 +6,15 @@ public class UserManager {
 	private ArrayList<User> users;
 	private static UserManager instance = new UserManager();
 	private Save userSave = Save.getInstance();
+	private Load userLoad = Load.getInstance();
 	
 	private UserManager() {
-		users = new ArrayList<User>();
-		User admin = new User("admin","1");
-		users.add(admin);
+		users = userLoad.loadUserData();
+		if(users==null) {
+			users = new ArrayList<User>();
+			User admin = new User("admin","1");
+			users.add(admin);			
+		}
 	}
 	
 	public static UserManager getInstance() {
