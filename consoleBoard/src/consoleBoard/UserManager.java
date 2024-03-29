@@ -9,6 +9,8 @@ public class UserManager {
 	
 	private UserManager() {
 		users = new ArrayList<User>();
+		User admin = new User("admin","1");
+		users.add(admin);
 	}
 	
 	public static UserManager getInstance() {
