@@ -10,6 +10,7 @@ public class ConsoleBoard {
 	private final int ADD_CONTENTS = 5;
 	private final int DELETE_CONTENTS = 6;
 	private final int MODIFY_CONTENTS = 7;
+	private final int VIEW_CONTENTS = 8;
 	private final int EXIT = 0;
 
 	public static Scanner sc = new Scanner(System.in);
@@ -56,6 +57,7 @@ public class ConsoleBoard {
 		System.out.println("[5] 글 작성");
 		System.out.println("[6] 글 삭제");
 		System.out.println("[7] 글 수정");
+		System.out.println("[8] 글 조회");
 		System.out.println("[0] 종	료");
 	}
 
@@ -98,6 +100,8 @@ public class ConsoleBoard {
 			String id = idAndPassword[0];
 			String password = idAndPassword[1];
 			boardManager.updateContents(id, password);
+		} else if (choice == VIEW_CONTENTS) {
+			boardManager.viewContents();
 		} else if (choice == EXIT)
 			isRun = false;
 	}
