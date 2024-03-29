@@ -26,6 +26,10 @@ public class Board extends ContentsFrame{
 		return this.password;
 	}
 	
+	public void setPassword(String newPassword) {
+		this.password = newPassword;
+	}
+	
 	@Override
 	public void setIsNotification() {
 		super.isNotification = false;

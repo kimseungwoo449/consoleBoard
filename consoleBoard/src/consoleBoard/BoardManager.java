@@ -122,7 +122,6 @@ public class BoardManager {
 
 		String title = contents.getTitle();
 		String detail = contents.getDetail();
-		System.out.println(detail);
 		info = String.format("제목 : %s\n내용 : %s", title, detail);
 
 		return info;
@@ -254,6 +253,16 @@ public class BoardManager {
 
 		Notification notification = new Notification(title, detail);
 		notifications.add(notification);
+	}
+	
+	public void modifyBoardsPassword(String id,String newPassword) {
+		for(int i =1;i<=board.size();i++) {
+			Board board = this.board.get(i);
+			
+			if(board.getId().equals(id)) {
+				board.setPassword(newPassword);
+			}
+		}
 	}
 
 }

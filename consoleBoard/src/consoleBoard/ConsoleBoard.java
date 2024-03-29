@@ -5,15 +5,16 @@ import java.util.Scanner;
 public class ConsoleBoard {
 	private final int JOIN = 1;
 	private final int LEAVE = 2;
-	private final int LOG_IN = 3;
-	private final int LOG_OUT = 4;
-	private final int BEFORE_PAGE = 5;
-	private final int AFTER_PAGE = 6;
-	private final int ADD_CONTENTS = 7;
-	private final int DELETE_CONTENTS = 8;
-	private final int MODIFY_CONTENTS = 9;
-	private final int VIEW_CONTENTS = 10;
-	private final int WRITE_NOTICE = 11;
+	private final int MODIFY_USER = 3;
+	private final int LOG_IN = 4;
+	private final int LOG_OUT = 5;
+	private final int BEFORE_PAGE = 6;
+	private final int AFTER_PAGE = 7;
+	private final int ADD_CONTENTS = 8;
+	private final int DELETE_CONTENTS = 9;
+	private final int MODIFY_CONTENTS = 10;
+	private final int VIEW_CONTENTS = 11;
+	private final int WRITE_NOTICE = 12;
 	private final int EXIT = 0;
 
 	public static Scanner sc = new Scanner(System.in);
@@ -55,16 +56,17 @@ public class ConsoleBoard {
 	private void printMenu() {
 		System.out.println("[1] 회원가입");
 		System.out.println("[2] 회원탈퇴");
-		System.out.println("[3] 로그	인");
-		System.out.println("[4] 로그아웃");
-		System.out.println("[5] 이전");
-		System.out.println("[6] 이후");
-		System.out.println("[7] 글 작성");
-		System.out.println("[8] 글 삭제");
-		System.out.println("[9] 글 수정");
-		System.out.println("[10] 글 조회");
+		System.out.println("[3] 회원정보 수정");
+		System.out.println("[4] 로그	인");
+		System.out.println("[5] 로그아웃");
+		System.out.println("[6] 이전");
+		System.out.println("[7] 이후");
+		System.out.println("[8] 글 작성");
+		System.out.println("[9] 글 삭제");
+		System.out.println("[10] 글 수정");
+		System.out.println("[11] 글 조회");
 		if (log == 0) {
-			System.out.println("[11] 공지 작성");
+			System.out.println("[12] 공지 작성");
 		}
 		System.out.println("[0] 종	료");
 	}
@@ -74,14 +76,14 @@ public class ConsoleBoard {
 			System.err.println("로그 아웃 후 이용가능합니다.");
 			return false;
 		} else if (log == -1 && (choice == LEAVE || choice == LOG_OUT || choice == ADD_CONTENTS
-				|| choice == DELETE_CONTENTS || choice == MODIFY_CONTENTS)) {
+				|| choice == DELETE_CONTENTS || choice == MODIFY_CONTENTS || choice == MODIFY_USER)) {
 			System.err.println("로그 인 후 이용가능합니다.");
 			return false;
 		}
 		return true;
 	}
 
-	private void runMenu(int choice) {		// log==0 어드민일땐 글작성,가입,탈퇴,글 수정을 막는다.
+	private void runMenu(int choice) { // log==0 어드민일땐 글작성,가입,탈퇴,글 수정을 막는다.
 		if (!isPossible(choice))
 			return;
 
@@ -89,6 +91,8 @@ public class ConsoleBoard {
 			userManager.createUser();
 		else if (choice == LEAVE && log != 0)
 			userManager.deleteUser();
+		else if (choice == MODIFY_USER && log != 0)
+			modifyUser();
 		else if (choice == LOG_IN)
 			userManager.login();
 		else if (choice == LOG_OUT)
@@ -97,27 +101,48 @@ public class ConsoleBoard {
 			boardManager.beforePage();
 		else if (choice == AFTER_PAGE)
 			boardManager.afterPage();
-		else if (choice == ADD_CONTENTS && log != 0) {
-			String[] idAndPassword = userManager.getUserIdAndPassword();
-			String id = idAndPassword[0];
-			String password = idAndPassword[1];
-			boardManager.writing(id, password);
-		} else if (choice == DELETE_CONTENTS) {
-			String[] idAndPassword = userManager.getUserIdAndPassword();
-			String id = idAndPassword[0];
-			String password = idAndPassword[1];
-			boardManager.deleteContents(id, password);
-		} else if (choice == MODIFY_CONTENTS && log != 0) {
-			String[] idAndPassword = userManager.getUserIdAndPassword();
-			String id = idAndPassword[0];
-			String password = idAndPassword[1];
-			boardManager.updateContents(id, password);
-		} else if (choice == VIEW_CONTENTS) {
+		else if (choice == ADD_CONTENTS && log != 0)
+			addContents();
+		else if (choice == DELETE_CONTENTS)
+			deleteContents();
+		else if (choice == MODIFY_CONTENTS && log != 0)
+			modifyContents();
+		else if (choice == VIEW_CONTENTS)
 			boardManager.viewContents();
-		} else if (choice == WRITE_NOTICE && log == 0) {
+		else if (choice == WRITE_NOTICE && log == 0)
 			boardManager.createNotification();
-		} else if (choice == EXIT)
+		else if (choice == EXIT)
 			isRun = false;
+	}
+
+	private void addContents() {
+		String[] idAndPassword = userManager.getUserIdAndPassword();
+		String id = idAndPassword[0];
+		String password = idAndPassword[1];
+		boardManager.writing(id, password);
+	}
+
+	private void deleteContents() {
+		String[] idAndPassword = userManager.getUserIdAndPassword();
+		String id = idAndPassword[0];
+		String password = idAndPassword[1];
+		boardManager.deleteContents(id, password);
+	}
+
+	private void modifyContents() {
+		String[] idAndPassword = userManager.getUserIdAndPassword();
+		String id = idAndPassword[0];
+		String password = idAndPassword[1];
+		boardManager.updateContents(id, password);
+	}
+
+	private void modifyUser() {
+		User user = userManager.modifyUserPassword();
+		if (user == null)
+			return;
+		String id = user.getId();
+		String password = user.getPassword();
+		boardManager.modifyBoardsPassword(id, password);
 	}
 
 	public void run() {

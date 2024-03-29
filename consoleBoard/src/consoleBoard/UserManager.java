@@ -73,7 +73,20 @@ public class UserManager {
 		info[1] = password;
 		return info;
 	}
-
+	
+	public User modifyUserPassword() {
+		User user = users.get(ConsoleBoard.log);
+		String password = ConsoleBoard.inputString("PASSWORD 재확인");
+		
+		if(!user.getPassword().equals(password)) {
+			System.err.println("패스워드가 일치하지 않습니다.");
+			return null;
+		}
+		String newPassword = ConsoleBoard.inputString("새로운 PASSWORD");
+		user.setPassword(newPassword);
+		return user.clone();
+	}
+	
 	// 유저 삭제
 	public String deleteUser() {
 		User user = users.get(ConsoleBoard.log);
