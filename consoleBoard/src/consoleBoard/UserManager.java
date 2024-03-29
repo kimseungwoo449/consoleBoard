@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class UserManager {
 	private ArrayList<User> users;
 	private static UserManager instance = new UserManager();
-	
+	private Save userSave = Save.getInstance();
 	
 	private UserManager() {
 		users = new ArrayList<User>();
@@ -30,6 +30,7 @@ public class UserManager {
 		User user = new User(id, password);
 		users.add(user);
 		System.out.println("가입이 완료되었습니다.");
+		userSave.saveUserFile(users);
 	}
 
 	private int findUserIndexById(String id) {
@@ -84,6 +85,7 @@ public class UserManager {
 		}
 		String newPassword = ConsoleBoard.inputString("새로운 PASSWORD");
 		user.setPassword(newPassword);
+		userSave.saveUserFile(users);
 		return user.clone();
 	}
 	
@@ -100,6 +102,7 @@ public class UserManager {
 		users.remove(user);
 		ConsoleBoard.log = -1;
 		System.out.println("탈퇴 처리 완료.");
+		userSave.saveUserFile(users);
 		return user.getId();
 	}
 }

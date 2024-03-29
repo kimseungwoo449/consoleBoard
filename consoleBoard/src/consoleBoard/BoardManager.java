@@ -19,7 +19,8 @@ public class BoardManager {
 	private int startRow;
 	private int endRow;
 	private int pageCount;
-
+	
+	private Save boardSave = Save.getInstance();
 	private ArrayList<Notification> notifications;
 	private Map<Integer, Board> board; // 키값 글번호, value값 board
 	private int contentsNumber;
@@ -50,6 +51,7 @@ public class BoardManager {
 		board.put(RECENT, newContents);
 		calculatePageCount();
 		System.out.println("게시글 등록 완료.");
+		boardSave.saveBoardFile(board);
 	}
 
 	private void pushOldContents() {
@@ -167,6 +169,7 @@ public class BoardManager {
 		this.contentsNumber = this.board.size() + 1;
 		calculatePageCount();
 		System.out.println("게시글 삭제 완료.");
+		boardSave.saveBoardFile(board);
 	}
 
 	private void refineBoard(int number) {
@@ -218,6 +221,7 @@ public class BoardManager {
 		
 		board.put(number, newContents);
 		System.out.println("게시글 수정 완료.");
+		boardSave.saveBoardFile(board);
 	}
 
 	// 이전
@@ -253,6 +257,7 @@ public class BoardManager {
 
 		Notification notification = new Notification(title, detail);
 		notifications.add(notification);
+		boardSave.saveNoticeFile(notifications);
 	}
 	
 	public void modifyBoardsPassword(String id,String newPassword) {
@@ -263,6 +268,7 @@ public class BoardManager {
 				board.setPassword(newPassword);
 			}
 		}
+		boardSave.saveBoardFile(board);
 	}
 
 }
