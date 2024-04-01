@@ -138,10 +138,7 @@ public class BoardManager {
 		return info;
 	}
 
-	public void viewAllTitle() {
-		List keySet = new ArrayList(board.keySet());
-
-		Collections.sort(keySet);
+	private void viewNotice() {
 		if (notifications.size() > 0) {
 			System.out.println("-----------------");
 			System.out.println("[공지]");
@@ -151,8 +148,9 @@ public class BoardManager {
 			}
 			System.out.println("-----------------");
 		}
-		System.out.println("-----------------");
-		System.out.println("[게시판]");
+	}
+
+	private void viewBoards() {
 		for (int i = startRow; i <= endRow; i++) {
 			int key = i;
 			Board contents = board.get(key);
@@ -163,6 +161,16 @@ public class BoardManager {
 				System.out.println(info);
 			}
 		}
+	}
+
+	public void viewAllTitle() {
+		List keySet = new ArrayList(board.keySet());
+
+		Collections.sort(keySet);
+		viewNotice();
+		System.out.println("-----------------");
+		System.out.println("[게시판]");
+		viewBoards();
 		String data = String.format("[%d/%dpage](%d)", curPageNumber, pageCount, board.size());
 		System.out.println(data);
 		System.out.println("-----------------");
